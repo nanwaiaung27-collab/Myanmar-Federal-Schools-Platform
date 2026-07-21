@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Federal Schools of Myanmar</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pyidaungsu:wght@400;700&display=swap');
+
+        :root {
+            --primary-blue: #1a4d8c; 
+            --accent-gold: #f1c40f;  
+            --soft-bg: #f8fafc;
+            --text-dark: #2c3e50;
+            --telegram-blue: #0088cc;
+            --facebook-blue: #4267B2;
+            --website-gray: #666;
+        }
+
+        body {
+            font-family: 'Pyidaungsu', 'Segoe UI', Tahoma, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.8;
+            min-height: 100vh;
+            background-image: url('bg1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
+
+        .intro-card, details, .school-card {
+            background: rgba(255, 255, 255, 0.45) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        header {
+            background: linear-gradient(135deg, rgba(26, 77, 140, 0.85), rgba(41, 128, 185, 0.85));
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            clip-path: ellipse(150% 100% at 50% 0%);
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            margin-bottom: 15px;
+        }
+
+        .container { 
+            max-width: 900px; 
+            margin: 0 auto; 
+            padding: 0 20px 50px; 
+        }
+
+        .intro-card { 
+            padding: 35px; 
+            margin-bottom: 40px; 
+            border-left: 6px solid var(--accent-gold); 
+        }
+
+        .intro-card p {
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        /* Search Box & Suggestions Styling */
+        .search-container { 
+            position: relative; 
+            margin: 30px auto; 
+            max-width: 600px; 
+            padding: 0 20px; 
+        }
+
+        #schoolSearch { 
+            width: 100%; 
+            padding: 15px 20px; 
+            background: rgba(255, 255, 255, 0.7); 
+            backdrop-filter: blur(5px); 
+            border: 2px solid rgba(255, 255, 255, 0.9); 
+            border-radius: 30px; 
+            font-size: 16px; 
+            outline: none; 
+            box-sizing: border-box;
+        }
+
+        .suggestions-list {
+            position: absolute;
+            top: 100%;
+            left: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            margin-top: 5px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 99;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .suggestion-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            font-size: 0.95rem;
+            color: var(--text-dark);
+        }
+
+        .suggestion-item:hover {
+            background: rgba(26, 77, 140, 0.1);
+            color: var(--primary-blue);
+        }
+
+        /* School Card & Details Styling */
+        .school-card {
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        details {
+            border: none;
+            background: transparent !important;
+        }
+
+        summary { 
+            padding: 20px 25px; 
+            font-size: 1.15rem; 
+            font-weight: 700; 
+            cursor: pointer; 
+            list-style: none; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            color: var(--primary-blue); 
+        }
+
+        summary::-webkit-details-marker {
+            display: none;
+        }
+
+        summary::after { 
+            content: '▼'; 
+            font-size: 0.8rem; 
+            color: var(--accent-gold); 
+            transition: transform 0.3s ease;
+        }
+
+        details[open] summary::after {
+            transform: rotate(180deg);
+        }
+
+        .school-section { 
+            padding: 20px 25px 25px; 
+            border-top: 1px solid rgba(255, 255, 255, 0.5); 
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .info-note {
+            margin-bottom: 20px;
+        }
+
+        .note-heading {
+            color: var(--primary-blue);
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 1.05rem;
+        }
+
+        .moe-badge {
+            background: rgba(255, 255, 255, 0.4);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .info-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+            gap: 20px; 
+            margin-top: 15px; 
+        }
+
+        .info-box { 
+            padding: 15px; 
+            background: rgba(255, 255, 255, 0.5); 
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-radius: 10px; 
+            display: flex; 
+            flex-direction: column; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+
+        .label { 
+            font-weight: bold; 
+            font-size: 0.9rem; 
+            color: var(--primary-blue); 
+            margin-bottom: 8px;
+        }
+
+        .value {
+            font-size: 0.95rem;
+            color: var(--text-dark);
+        }
+
+        .contact-links { 
+            display: flex; 
+            gap: 15px; 
+            margin-top: 5px; 
+            flex-wrap: wrap;
+        }
+
+        .contact-link { 
+            text-decoration: none; 
+            color: var(--text-dark); 
+            font-weight: 500;
+        }
+
+        .contact-link:hover {
+            opacity: 0.8;
+        }
+
+        .tool-tag { 
+            display: inline-block; 
+            background: rgba(255,255,255,0.6); 
+            padding: 6px 12px; 
+            border-radius: 6px; 
+            margin-right: 6px; 
+            margin-top: 8px; 
+            font-size: 0.85rem;
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+
+        .cap { 
+            position: fixed; 
+            top: -50px; 
+            font-size: 24px; 
+            animation: fall linear infinite; 
+            z-index: 1000; 
+            pointer-events: none; 
+        }
+        @keyframes fall { to { transform: translateY(110vh); } }
+
+        footer { 
+            text-align: center; 
+            padding: 40px; 
+            color: white; 
+            font-size: 0.9rem; 
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Myanmar Federal Schools Platform</h1>
+    <p>ပညာရေးဖြင့် အနာဂတ်ကို တည်ဆောက်စို့</p>
+</header>
+
+<div class="container">
+    <div class="intro-card">
+        <h3 style="color: var(--primary-blue); margin-top: 0; margin-bottom: 15px;">🔎 လေ့လာရန်လမ်းညွှန်</h3>
+        <p>မြန်မာနိုင်ငံကြားကာလအတွင်း NUG (MOE) လက်အောက်ရှိ Online Federal Schools များအား သိရှိလေ့လာနိုင်ရန်အောက်ပါအတိုင်း ဖော်ပြထားပါသည်။</p>
+        <p>⚠️ ကျွန်တော်တို့ဖန်တီးပေးထားသော Website သည် <strong>CDM</strong> ကျောင်းသားကျောင်းသူများ ပညာဆက်လက်သင်ကြားနိုင်ရန် ရည်ရွယ်ဖန်တီးထားခြင်းဖြစ်ပါသည်။</p>
+        <p>🆘 ကျွန်တော်တို့ Website သို့ဝင်ရောက်လေ့လာသောကျောင်းသားကျောင်းသူများနှင့် ကျောင်းသားမိဘများ အနေဖြင့် ဖော်ပြထားသော အချက်လက်များကို သေချာစွာဖတ်ရှုပေးပါရန် တိုက်တွန်းအပ်ပါသည်။</p>
+    </div>
+
+    <!-- Search Container with Suggestion Dropdown -->
+    <div class="search-container">
+        <input type="text" id="schoolSearch" onkeyup="filterSchools()" placeholder="Search by school name 🔎...">
+        <div id="suggestionsList" class="suggestions-list"></div>
+    </div>
+
+    <!-- ကျောင်းစာရင်းများ loop ဖြင့် ဝင်ရောက်လာမည့်နေရာ -->
+    <div id="schoolList"></div>
+</div>
+
+<!-- JavaScript for Dynamic Rendering & Search -->
+<script>
+    // ကျောင်းအသစ်များ ထပ်ထည့်လိုပါက ဤ Array ထဲတွင် အချက်အလက်များ ဆက်လက်ထည့်သွင်းနိုင်ပါသည်
+    const schoolsData = [
+        {
+            name: "Kyaukpadaung Federal School",
+            established: "၂၀၂၂ ခုနှစ်",
+            students: "၃၀၀ ကျော်",
+            teachers: "၈၅ ဦး",
+            time: "မနက်ပိုင်း (8:00 AM - 12:00 PM)",
+            badgeContent: `✅ Kyaukpadaung Federal School ဟာဆိုရင် MOE အသိမှတ်ပြုကျောင်းတစ်ကျောင်းဖြစ်ပါတယ်နော် <br>
+            🗻 Kyaukpadaung Federal School ဟာဆိုရင် အညာဒေသရဲ့ ပြယုခ်တစ်ခု အညာဒေသရဲ့ အိုအေစစ်ဖြစ်တဲ့ ပုပ္ပါးတောင်းကြီးရှိရာဒေသကို ကိုယ်စားပြုထားတဲ့ ပြည်သူ့ခြေပြုကျောင်းတစ်ကျောင်းပဲဖြစ်ပါတယ်ခင်ဗျာ <br>
+            🗓️ စာသင်နှစ် အနေဖြင့်လည်း (၈) လကြာသတ်မှတ်ထားပြီး အတန်းချိန်များကိုလည်း ကျောင်းသားလူငယ်များ ကျောင်းသားကျောင်းသူများအတွက် Social Mediaများတွင်အချိန်ဖြုန်းနေခြင်းမှလျှော့ချနိုင်ရန် မနက် ၈နာရီမှ ညနေ ၄နာရီအထိသင်ကြားပေးနေပါတယ်ခင်ဗျာ📖📖 <br>
+            🧑‍💻 ကျောင်းသား၊ ကျောင်းသူသစ်များကိုလည်း နှစ်စဉ်သင်ကြားပေးနေသော Batchတစ်ခုပြီးဆုံးပြီး ၄လအတွင်း ကျောင်းအပ်လက်ခံပေးနေတယ်ခင်ဗျာ <br>
+            📖 Monthly Assessments များကိုလည်း လစဉ်ကျင်းပပြီး ကျောင်းသား၊ကျောင်းသူများ၏ သင်ယူတတ်မြောက်မှု Report များကို ကျောင်းသားကျောင်းသူများနှင့် မိဘများထံ ကြေညာပေးပါတယ်ခင်ဗျာ။ နှစ်ဝက်စာမေးပွဲနှင့် အတန်းတင် အရည်အချင်းစစ်စာမေးပွဲများကိုလဲ စနစ်တကျ ကြပ်မတ်၍ Google Form ကိုအသုံးပြုဖြေဆိုစေပါသည်ခင်ဗျာ <br>
+            👉 ပြည်သူ့အခြေပြုကျောင်းတစ်ကျောင်းဖြစ်သည်နှင့်အညီ Donation ကိုလည်း သတ်မှတ်ထားခြင်းမရှိပဲ ကျောင်းသားကျောင်းသူများ လှူဒါန်းလို၍ ဆက်သွယ်မှသာ လက်ခံဆောင်ရွက်ပေးပြီး ဂုဏ်ပြုမှတ်တမ်းလွှာများထုတ်ပေးပါတယ်နော် <br>
+            👨‍🏫 ဆရာ၊ ဆရာမအင်အားအနေနဲ့ လုံးလောက်စွာရှိပြီးတော့ နှစ်စဉ်ကျောင်းသားဦးရေမှာဆိုရင်လဲ ၂၅၀မှ ၃၀၀ ကျော်တောင်ရှိတာဆိုတော့ ကျောင်းသား၊ ကျောင်းသူတွေအနေနဲ့သူငယ်ချင်းတွေအများကြီး ပျော်ပျော်ရွှင်ရွှင်ပညာဆက်လက်သင်ကြားနိုင်မှာဖြစ်ပါတယ်နော် 🙆‍♀️🙆‍♂️ <br>
+            📈 ကျောင်းဖွင့်ခဲ့တာဆိုရင် ၂၀၂၆-၂၀၂၇မှာ Batch-5 ကိုရောက်လာပြီဖြစ်ပြီး ကျောင်းဖွင့်လှစ်ရခြင်းရဲ့ ရည်ရွယ်မှာဆိုရင် CDM ကျောင်းသား၊ ကျောင်းသူတွေအတွက် ရည်ရွယ်ထားတာဖြစ်လို့ Kyaukpadaung Federal ကိုရွေးချယ်ဖို့တိုက်တွန်းလိုက်ပါတယ်နော်...<br>
+            🔐🔐 လုံခြုံရေးမှာဆိုရင်လဲ စိတ်ချရပြီးသားမို့ ကျောင်းသားမိဘတွေအနေဖြင့်လည်း မိမိတို့သားသမီးများကို ယုံကြည်စိတ်ချစွာကျောင်းအပ်နှံနိုင်ပါတယ်ခင်ဗျာ.....<br>
+            🥲 လက်ရှိမှာ Kyaukpadaung Federal School အနေဖြင့်တစ်ခြားသင်ရိုးများကို သင်ကြားခြင်းမရှိသေးပဲ NUG MOEမှချမှတ်ထားသော သင်ရိုးကိုသာ အစဉ်တစိုက်သင်ကြားပေးနေပါတယ်ခင်ဗျာ <br>
+            📡 ပြည့်ပြည့်စုံစုံသိချင်တာတွေကိုတော့ အောက်မှာ ချပေးထားတဲ့ ကျောင်းရဲ့ Telegram, Facebook Page တို့ကိုဆက်သွယ်လိုက်တော့နော်.....`,
+            telegram: "https://t.me/KPGFS",
+            facebook: "https://www.facebook.com/100083221627779/posts/pfbid0tNHDnXmSvFKSmZPvfVu4ncoCa73xvsfsLeaZ6vTWQtqgiVHGn57yDPrh7bqsuwxEl/",
+            website: "javascript:void(0);",
+            youtube: "",
+            tools: ['<i class="fas fa-video"></i> Zoom', '<i class="fas fa-graduation-cap"></i> Google Classroom', '<i class="fas fa-poll"></i> Telegram']
+        },
+        {
+            name: "MYANANDAR Federal School",
+            established: "၂၀၂၁ ခုနှစ်",
+            students: "၂၀၀ ဝန်းကျင်",
+            teachers: "၆၉ ဦး",
+            time: "KG to Grade-4 (8:00 AM - 12:00 PM) <br> Grade-5 to Grade-11 (12:00 PM - 5:00 PM) <br> Grade-12 (8:00 AM - 3:00 PM)",
+            badgeContent: `✅ MYANANDAR Federal School ဟာဆိုရင်လည်း NUG MOE အသိမှတ်ပြုကျောင်းတစ်ကျောင်းပဲဖြစ်ပါတယ်ခင်ဗျာ <br>
+            🎯 MYANANDAR Federal School ဖွင့်လှစ်ရခြင်းရဲ့ မျှော်မှန်းချက် (Mission) တွေကတော့ ထူးချွန်ထက်မြက်ပြီး လူ့အဖွဲ့အစည်းအတွက် အကျိုးပြုမည့် နိုင်ငံ့သားကောင်းရတနာများ ပေါ်ထွန်းလာစေရန် ပြုစုပျိုးထောင်ပေးရန်။ (To cultivate students into useful citizens, fostering brightness and excellence.) ဝေဖန်ပိုင်းခြားနိုင်သော အတွေးအခေါ် နှင့် စိတ်ဓာတ်ကောင်းမွန်သည့် စရိုက်လက္ခဏာ ဖွံ့ဖြိုးတိုးတက်ရေးကို အဓိကထား ဆောင်ရွက်ရန်။ (To emphasize on critical thinking, and character development.) လူ့အဖွဲ့အစည်းအတွက် အဓိပ္ပာယ်ရှိသော အကျိုးပြုမှုများ ဆောင်ရွက်နိုင်ရန် လိုအပ်သည့် အရည်အချင်း၊ ဗဟုသုတနှင့် တန်ဖိုးထားမှုများကို ကျောင်းသား/သူများထံ လက်ဆင့်ကမ်း ပျိုးထောင်ပေးရန်။ (To equip students with the skills and values needed for meaningful contributions to society.) အာဏာဖီဆန်ရေးလှုပ်ရှားမှု (CDM) တွင် ပါဝင်ကြသည့် ပညာရေးဝန်ထမ်း ဆရာ/ဆရာမများ၊ ကျောင်းသား/ကျောင်းသူများအား အစဉ်တစိုက် ဝန်းရံပံ့ပိုးကူညီပေးရန်။ (To support the CDM(civil disobedience movement) teachers and students) စတဲ့ အကြောင်းအရာအများကို အခြေခံပြီး CDM ကျောင်းသားများနှင့် ဆရာဆရာမများအတွက် အကျိုးပြုပေးနိုင်ရန်ဖွင့်လှစ်ထားခြင်းပဲဖြစ်ပါတယ် ခင်ဗျာ <br>
+            🏆 MYANANDAR Federal ကျောင်း၏ အဓိကလုပ်ငန်းစဉ်မှာ အားလုံးပါဝင်နိုင်ပြီး တက်ကြွစွာ ပူးပေါင်းဆောင်ရွက်တတ်သည့် ထူးချွန်ထက်မြက်သော လူ့အဖွဲ့အစည်းတစ်ရပ် ပေါ်ထွန်းလာစေရန် တည်ဆောက်သွားရန် ဖြစ်သည်။ (The mission of our school is to establish a vibrant community dedicated to excellence, inclusive, and active engagement.) ကျောင်းသား/သူများအနေဖြင့် အောင်မြင်သော အနာဂတ်ဆီသို့ လျှောက်လှမ်းနိုင်ရန်အတွက် စဉ်ဆက်မပြတ်သော ပညာရည်ထူးချွန်ထက်မြက်မှုမှတစ်ဆင့် လိုအပ်သည့် အသိပညာနှင့် ကျွမ်းကျင်မှုများကို ဖြည့်ဆည်းမြှင့်တင်ပေးရန် ရည်မှန်းပါသည်။ (We aim to empower our students with the knowledge and skills needed for a successful future through a relentless pursuit of academic excellence.) <br>
+            ⏱️ MYANANDAR Federal ၏အတန်းချိန်များမှာဆိုရင် မနက်ပိုင်းစာသင်ချိန်ဖြစ်သည့် နံနက် ၈နာရီမှ နေ့ခင်း ၁၂နာရီတွင် KG မှ Grade-4 ကျောင်းသားကျောင်းသူများအတွက် ဖွင့်လှစ်ပေးထားပါသည်။ <br>
+            🕐 Grade-5 to Grade-11 ကျောင်းသားများအတွက်ဆိုရင်တော့ နေ့ခင်း၁၂နာရီ မှ ညနေခင်း ၅နာရီအထိသင်ကြားပေးနေပါတယ်နော် <br>
+            ⏱️ Grade-12 ကျောင်းသားများအတွက်ဆိုရင်တော့ နံနက် ၈နာရီမှ ညနေ ၃နာရီအထိ တစိုက်မက်မက်သင်ကြားပေးနေပါတယ်ခင်ဗျာ ကျောင်းသားမိဘများအနေဖြင့်လည်း မိမိတို့သားသမီးကို အရည်အချင်းပြည့်ဝသော သားသမီးများဖြစ်လာစေရန် အထူးကောင်းမွန်သော ကျောင်းတစ်ကျောင်းဖြစ်ပါတယ်ခင်ဗျ <br>
+            ⏱️ ညနေခင်း ၆နာရီမှ ၉နာရီအချိန်တွေမှာတော့ ကျောင်းသားကျောင်းသူများအတွက် အကျိုးပြုအတန်းများဖြစ်သည့် Language Class နှင့် Extra Curriculum သင်ကြားပေးနေပါတယ်ခင်ဗျာ <br>
+            ⌛ သင်ကြားရေးကာလအနေဖြင့် ၉လကြာမြင့်မှာဖြစ်ပြီး ပထမနှစ်ဝက်စာမေးပွဲကိုတော့ စာသင်နှစ်ရဲ့ပထမ ၄လအတွင်း ဖြေဆိုရမည်ဖြစ်ပြီး ဖြေဆိုကာလအနေဖြင့် ၂ပတ်အတွင်း ဖြေဆိုရမည်ဖြစ်ပါသည်။ ဒုတိယနှစ်ဝက်အတွက် အကဲဖြတ်စစ်ဆေးခြင်းကိုလဲ စာသင်နှစ်၏ဒုတိယ ၄လအတွင်းဖြေဆိုရမှာဖြစ်ပါတယ်ခင်ဗျာ <br>
+            🚨 Chess, Mental Health & Psychosocial Support, Easy Talk, ICT, Computer Science, Java Foundation, Database, Maths Olympiad, Photoshop, Electronic and Robotics, Drawing, Music Theory, Piano and Guitar Class, Basket Woven, Enviromental and Human Right, Phonetics စတဲ့ ဒေသန္တရဗဟုသုတရစေသော အတန်းများလဲရှိပါတယ်နော် <br>
+            💸 ကျောင်း Donation အနေဖြင့်လည်း ကျောင်းသား၊ ကျောင်းသူများ၏စိတ်ဆန္ဒအားဖြင့် တက်နိုင်သော ပမာဏကိုသာ လစဉ်အလှူငွေကို လက်ခံပေးပါတယ်ခင်ဗျာ <br>
+            🏫 MYANANDAR ပြည့်သူအခြေပြု Onlineကျောင်းဟာဆိုရင် အာဏာသိမ်းပြီးချိန်မှစ၍ ဖွင့်လှစ်သင်ကြားပေးခဲ့တာဖြစ်ပြီး ၂၀၂၆-၂၀၂၇ ပညာသင်နှစ်ဟာဆိုရင် Batch-9 သို့ရောက်ရှိနေပြီဖြစ်ပါတယ်ခင်ဗျာ <br>
+            📈 ကျောင်းသားဦးရေမှာဆိုရင် ၂၀၀ ဝန်းကျင်ပြီး Group Project Activitiesများကိုလည်း အတန်းဖော်များနှင့်တက်ညီလက်ညီလုပ်ဆောင်စေပြီး အဖွဲ့အစည်းဖြင့်လုပ်ဆောင်ရမည့်အခါလိုအပ်သော ကျွမ်းကျင်တတ်မြောက်မှုများကိုလည်း သင်ကြားပြသပေးလျက်ရှပါတယ်နော်...... <br>
+            🏁 ကျောင်းတွင်းပြိုင်ပွဲများအနေဖြင့် စစ်တုရင်နှင့် Mobile Legend ကဲ့သို့သော Esport ပြိုင်ပွဲများကိုလည်းကျင်းပပေးပါတယ်နော်.. <br>
+            🔐 လုံခြုံရေးအနေဖြင့်လည်း အထူးကြပ်မတ်ဆောင်ရွက်ထားပါတယ်ခင်ဗျာ <br>
+            👨‍🏫 အထက်ပါအချက်များနှင့်ကိုက်ညီတဲ့ ပြည်သူ့အခြေပြုကျောင်းတစ်ကိုရှာဖွေနေတဲ့ ကျောင်းသားမိဘများနှင့် ကျောင်းသူ၊ ကျောင်းသားများအနေဖြင့် အောက်မှာချပေးထားတဲ့ Telegram, Facebook Pageတွေကနေတစ်ဆင့် MYANANDAR Federal Schoolကို မြန်မြန်လေးဆက်သွယ်လိုက်တော့နော်....`,
+            telegram: "https://t.me/mndfschool",
+            facebook: "https://www.facebook.com/mndfschool",
+            website: "https://cloud.mndfs.org",
+            youtube: "https://www.youtube.com/@mndfschool",
+            tools: ['<i class="fas fa-video"></i> Zoom', '<i class="fas fa-graduation-cap"></i> Google Classroom', '<i class="fas fa-users"></i> Microsoft Teams', '<i class="fas fa-poll"></i> Microsoft Forms', '<i class="fas fa-poll"></i> Telegram']
+        },
+        {
+            name: "Bago Federal School",
+            established: "၂၀၂၂ ခုနှစ်",
+            students: "၇၀၀ ကျော်",
+            teachers: "၆၀ ဦး",
+            time: "မနက်ပိုင်း (9:00 AM - 12:00 PM) <br> ညနေပိုင်း (1:00 PM - 4:00 PM)",
+            badgeContent: `✅ Bago Federal School ဟာဆိုရင် MOE အသိမှတ်ပြုကျောင်းတစ်ကျောင်းဖြစ်ပါတယ်နော် <br>
+            🏫 Bago Federal School ဟာဆိုရင် ပဲခူးဒေသကို အခြေပြုထားပြီး CDM ကျောင်းသား၊ ကျောင်းသူများ ပညာဆက်လက်သင်ယူနိုင်ရန်အတွက် ဖွင့်လှစ်ထားရှိတဲ့ ပြည်သူ့ခြေပြု Online ကျောင်းတစ်ကျောင်းပဲဖြစ်ပါတယ်ခင်ဗျာ <br>
+            🗓️ စာသင်နှစ် အနေဖြင့်လည်း (၈) လကြာသတ်မှတ်ထားပြီး အတန်းချိန်များအနေဖြင့် နံနက် ၉နာရီမှ နေ့ခင်း၁၂နာရီနှင့် ညနေခင်း ၁နာရီမှ ညနေ၄နာရီအထိဖွင့်လှစ်သင်ကြားနေပါတယ်ခင်ဗျာ📖📖 <br>
+            🧑‍💻 ကျောင်းသား၊ ကျောင်းသူသစ်များကိုလည်း နှစ်စဉ်သင်ကြားပေးနေသော Batchတစ်ခုပြီးဆုံးပြီးတိုင်း ကျောင်းအပ်လက်ခံပေးနေတယ်ခင်ဗျာ <br>
+            📖 Monthly Assessments များအနေဖြင့် Projectနှင့် Group Work များကိုလစဉ်စစ်ဆေးပြီး ကျောင်းသား၊ကျောင်းသူများ၏ နှစ်ဝက်စာမေးပွဲနှင့် အတန်းတင် အရည်အချင်းစစ်စာမေးပွဲများကိုလဲ စနစ်တကျ ကြပ်မတ်၍ Google Form ကိုအသုံးပြုဖြေဆိုစေပါသည်ခင်ဗျာ <br>
+            👉 ပြည်သူ့အခြေပြုကျောင်းတစ်ကျောင်းဖြစ်သည်နှင့်အညီ Donation ကိုလည်း သတ်မှတ်ထားခြင်းမရှိပဲ ကျောင်းသားကျောင်းသူများထံမှ ကျောင်းလုပ်ငန်းစဉ်များဆောင်ရွက်အတွက်လှူဒါန်းလာသည်ကိုသာလက်ခံပေးပါသည်ခင်ဗျာ <br>
+            👨‍🏫 ဆရာ၊ ဆရာမအင်အားအနေနဲ့ လုံးလောက်စွာရှိပြီးတော့ နှစ်စဉ်ကျောင်းသားဦးရေမှာဆိုရင်လဲ ၇၀၀ ကျော်တောင်ရှိတာဆိုတော့ ကျောင်းသား၊ ကျောင်းသူတွေအနေနဲ့သူငယ်ချင်းတွေအများကြီး ပျော်ပျော်ရွှင်ရွှင်ပညာဆက်လက်သင်ကြားနိုင်မှာဖြစ်ပါတယ်နော် 🙆‍♀️🙆‍♂️ <br>
+            📈 ကျောင်းဖွင့်ခဲ့တာဆိုရင် ၂၀၂၆-၂၀၂၇မှာ Batch-5 ကိုရောက်လာပြီဖြစ်တဲ့ Bago Federal School သည်အရည်အသွေးပြည့်ဝသော ပညာရေးကို အခြေခံ၍ လွတ်လပ်စွာ တွေးခေါ်နိုင်သော၊ မတူကွဲပြားမှုကို လေးစားတန်ဖိုးထားသော၊ ငြိမ်းချမ်းရေးနှင့် တရားမျှတမှုကို ဦးတည်ဆောင်ရွက်နိုင်သော မျိုးဆက်သစ် လူငယ်များ ပေါ်ထွန်းလာစေရန်နှင့် အနာဂတ် ဖက်ဒရယ်ဒီမိုကရေစီ မြန်မာနိုင်ငံကို ဦးဆောင်တည်ဆောက်နိုင်မည့် နိုင်ငံသားကောင်းများ ဖြစ်လာစေရန် မျှော်မှန်းပါသည်။ CDM ကျောင်းသား၊ ကျောင်းသူများအား ပညာရေးကို ဆက်လက်လေ့လာရုံသာမက စိတ်ဓာတ်ခိုင်မာ၍ တာဝန်ယူတတ်သော လူငယ်များအဖြစ် ကြီးပြင်းလာစေရန် မျှော်လင့်ပါသည်။ Bago Federal School သည် CDM ကျောင်းသား၊ ကျောင်းသူများ၏ ပညာရေးခရီးစဉ် မပြတ်တောက်စေရန် ရည်ရွယ်၍ အရည်အသွေးပြည့်ဝသော ပညာရေးကို စနစ်တကျ စီစဉ်ပံ့ပိုးပေးလျက်ရှိပါသည်။ ကျောင်းသား၊ ကျောင်းသူတိုင်း ပညာသင်ယူခွင့်ကို ဆက်လက်ရရှိစေရန်၊ အသိပညာနှင့် အရည်အချင်းများ ဖွံ့ဖြိုးတိုးတက်စေရန်၊ ဝေဖန်ပိုင်းခြားတွေးခေါ်နိုင်စွမ်း၊ တာဝန်ယူတတ်မှုနှင့် လူမှုတာဝန်သိစိတ်တို့ကို ပြုစုပျိုးထောင်ပေးလျက်ရှိပါသည်။ ဒါကြောင့်Bago Federalဟာဆိုရင်ရွေးချယ်ဖို့အကောင်းဆုံးကျောင်းတစ်ကျောင်းဖြစ်ပါတယ်နော်...<br>
+            🏆 ကျောင်းတွင်းပြိုင်ပွဲများအနေဖြင့် အထိမ်းမှတ်နေ့ရက်များတွင် Mobile Legend ကဲ့သို့သော Esport ပြိုင်ပွဲများလည်းထားရှိပါတယ်ခင်ဗျာ <br>
+            🔐🔐 လုံခြုံရေးမှာဆိုရင်လဲ စိတ်ချရပြီးသားမို့ ကျောင်းသားမိဘတွေအနေဖြင့်လည်း မိမိတို့သားသမီးများကို ယုံကြည်စိတ်ချစွာကျောင်းအပ်နှံနိုင်ပါတယ်ခင်ဗျာ.....<br>
+            🥲 လက်ရှိမှာ Bago Federal School အနေဖြင့်ချမှတ်ထားသောသင်ရိုးများအပြင် Political Science, Environment & Phonics လို သင်ရိုးများကိုလည်း ကျောင်းသားကျောင်းသူများ ဗဟုသုတ ရစေရန်ရည်ရွယ်ဖွင့်လှစ်ပေးထားပါတယ်ခင်ဗျာ <br>
+            📡 ပြည့်ပြည့်စုံစုံသိချင်တာတွေကိုတော့ အောက်မှာ ချပေးထားတဲ့ ကျောင်းရဲ့ Telegram, Facebook Page တို့ကိုဆက်သွယ်လိုက်တော့နော်.....`,
+            telegram: "https://t.me/astro886",
+            facebook: "https://www.facebook.com/share/1CoqoftpC8/",
+            website: "javascript:void(0);",
+            youtube: "",
+            tools: ['<i class="fas fa-video"></i> Zoom', '<i class="fas fa-graduation-cap"></i> Google Classroom', '<i class="fas fa-poll"></i> Telegram']
+        },
+        {
+            name: "Future Stars Federal School",
+            established: "၂၀၂၂ ခုနှစ်",
+            students: "၁၀၀ ဝန်းကျင်",
+            teachers: "၃၀ ဦး",
+            time: "မနက်ပိုင်း (8:00 AM - 1:00 PM)",
+            badgeContent: `✅ Future Stars Federal School ဟာဆိုရင် MOE အသိမှတ်ပြုကျောင်းတစ်ကျောင်းဖြစ်ပါတယ်နော် <br>
+            🗓️ စာသင်နှစ် အနေဖြင့်လည်း (၁၀) လကြာမြင့်မှာဖြစ်ပြီး အတန်းများပြီးဆုံးသွားသောအခါတွင်လည်း ကျောင်းသားလူငယ်များ နိုင်ငံရေးအသိပညာ တိုးတက်စေရန်အတွက် နိုင်ငံရေးသိပ္ပံ သင်တန်းများကိုလဲ သင်ကြားပေးနေတဲ့ ကျောင်းတစ်ကျောင်းဖြစ်ပါတယ်ခင်ဗျာ📖📖 <br>
+            🧑‍💻 ကျောင်းသား၊ ကျောင်းသူသစ်များကိုလည်း နှစ်စဉ် ဇန်နဝါရီလတွင် ကျောင်းအပ်လက်ခံပေးနေတယ်ခင်ဗျာ။ <br>
+            📖 Monthly Assessments များကို သက်ဆိုင်ရာ ဆရာ၊ ဆရာမများနှင့်ကျောင်းသား၊ ကျောင်းသူများအကြား ညှိနှိုင်းတိုင်ပင်ကာ အဆင်ပြေသလို ဆောင်ရွက်လျှက်ရှိပါသည်၊၊ နှစ်ဝက်စာမေးပွဲနှင့် အတန်းတင် အရည်အချင်းစစ်စာမေးပွဲများကိုလဲ စနစ်တကျ ကြပ်မတ်၍ Google Form ကိုအသုံးပြုဖြေဆိုစေပါသည်ခင်ဗျာ။ <br>
+            👉 ကျောင်း Donation မှာလည်း သတ်မှတ်ထားခြင်းမရှိပဲ ကျောင်းသားကျောင်းသူများ အဆင်ပြေမှုရှိစေရန် တက်နိုင်သောအားဖြင့်သာထည့်ဝင်စေပါတယ်နော် <br>
+            👨‍🏫 ဆရာ၊ ဆရာမအင်အားအနေနဲ့ လုံးလောက်စွာရှိပြီးတော့ နှစ်စဉ်ကျောင်းသားဦးရေမှာဆိုရင်လဲ ၆၅% တောင်ရှိတာဆိုတော့ ကျောင်းသား၊ ကျောင်းသူတွေအနေနဲ့ ပျော်ပျော်ရွှင်ရွှင်ပညာဆက်လက်သင်ကြားနိုင်မှာဖြစ်ပါတယ်နော် 🙆‍♀️🙆‍♂️ <br>
+            📈 ကျောင်းဖွင့်ခဲ့တာဆိုရင် ၂၀၂၆-၂၀၂၇မှာ Batch-5 ကိုရောက်လာပြီဖြစ်ပြီး ကျောင်းဖွင့်လှစ်ရခြင်းရဲ့ ရည်ရွယ်မှာဆိုရင် CDM ကျောင်းသား၊ ကျောင်းသူတွေအတွက် ရည်ရွယ်ထားတာဖြစ်လို့ ရွေးချယ်ဖို့သင့်တော်တဲ့ကျောင်းတစ်ကျောင်းဖြစ်ပါတယ်နော်...<br>
+            🔐🔐 လုံခြုံရေးမှာဆိုရင်လဲ စိတ်ချရပြီးသားမို့ ကျောင်းသားမိဘတွေအနေဖြင့်လည်း မိမိတို့သားသမီးများကို ယုံကြည်စိတ်ချစွာကျောင်းအပ်နှံနိုင်ပါတယ်ခင်ဗျာ.....<br>
+            📡 ဆက်သွယ်စုံစမ်းဖို့အောက်မှာရှိတယ်နော်.....`,
+            telegram: "https://t.me/+4Ok2Fpmd4U9iN2Vl",
+            facebook: "https://www.facebook.com/share/14gQXi597SW/",
+            website: "javascript:void(0);",
+            youtube: "",
+            tools: ['<i class="fas fa-video"></i> Zoom', '<i class="fab fa-telegram"></i> Telegram']
+        },
+        {
+            name: "NwayOo Revolutionary High School",
+            established: "၂၀၂၂ ခုနှစ်",
+            students: "၇၀၀ ဝန်းကျင်",
+            teachers: "၅၀-၆၀ ဦး",
+            time: "NUG အစိုးရသင်ရိုး ပထမပိုင်းစာသင်ချိန်များ (9:00 AM - 11:00 AM) ညနေပိုင်းစာသင်ချိန် (1:00 PM - 3:00 PM) <br> International Course (5:00 PM - 9:00 PM)",
+            badgeContent: `✅ NwayOo Revolutionary High School ဟာဆိုရင်လည်း NUG MOE အသိမှတ်ပြုကျောင်းတစ်ကျောင်းပဲဖြစ်ပါတယ်ခင်ဗျာ <br>
+            🎯 ကျောင်းဖွင့်လှစ်ထားရခြင်းရဲ့ အဓိကရည်ရွယ်ချက်မှာဆိုရင် ပညာသင်ကြားရမည့် ကျောင်းနေအရွယ် ကျောင်းသား၊ ကျောင်းသူများအတွက် အကောင်းဆုံးသော ပညာရေးကို ဖော်ဆောင်ပေးနိုင်ရန်ဖြစ်ပါတယ်ခင်ဗျာ<br>
+            🏫 စကစမှ အာဏာသိမ်းပြီးချိန်နောက် ၂၀၂၂ တွင် ဖွင့်လှစ်ထားသောကျောင်းတစ်ကျောင်းဖြစ်ပါတယ်နော်... <br>
+            🎓 နိုင်ငံတစ်ကာသင်ရိုးများဖြစ်တဲ့ GED, Cambridge, IGCSE ကဲ့သို့ကျောင်းသား၊ ကျောင်းသူများအတွက် အလွန်အရေးပါသော International Course များကိုလည်း August နှင့် September လများတွင် နှစ်စဉ်ဖွင့်လှစ်သင်ကြားပေးနေပါတယ်နော်...<br>
+            ⌛ သင်တန်းချိန်များ၏ကြာမြင့်ချိန်မှာလည်း ၁၀လတာ ကြာမြင့်ပြီး ပထမနှစ်ဝက်နှင့် ဒုတိယနှစ်ဝက်ကို ၅လစီသတ်မှတ်ထားပြီး ပထမနှစ်ဝက်သင်ကြားပြီချိန်တွင် ကျောင်းသားလူငယ်များ အနားယူရန် ၁လတာ အားလပ်ရက်အဖြစ် သတ်မှတ်ထားပါတယ်နော်<br>
+            🧑‍🏫 ကျောင်းရဲ့ဆောင်ပုဒ်ဖြစ်တဲ့ Quality Education for all ဆိုတဲ့ ဆောင်ပုဒ်နဲ့အညီ စနစ်တကျဖွင့်လှစ်ထားပါတယ်နော်🥰<br>
+            🏆 လပတ်စာမေးပွဲများ နှစ်ဝက်စာမေးပွဲ၊ နှစ်ဆုံးစာမေးပွဲများကိုလည်း စနစ်တကျ စီစစ်ပေးနေပါတယ်ခင်ဗျာ <br>
+            💸 ကျောင်းရဲ့ အလှူငွေထည့်ဝင်ရာမှာလဲ ကျောင်းသား၊ ကျောင်းသူများ၏တတ်အားသမျှကိုသာလက်ခံထားပြီး International Course များအတွက်မှာဆိုရင်လည်း သင်ကြားပေးတဲ့ ဆရာ၊ ဆရာမများအတွက် သင့်လျော်သော ဂါရဝကျေးများဖြင့်သာ ဆောင်ရွက်လျှက်ရှိပါတယ်နော်.... <br>
+            🏫 ကျောင်းစာသင်ချိန်မှာဆိုရင်လည်း မနက်ပိုင်းမှာ NUG MOE မှ ချမှတ်ထားသောသင်ရိုးနှင့် ညပိုင်းအတန်းများမှာဆိုရင်လည်း International Course အဖြစ် သင်ကြားပေးနေပါတယ်နော်... <br>
+            🙆‍♀️ ကျောင်းသား၊ ကျောင်းသူအရေအတွက်မှာဆိုရင်လည်း မနက်ပိုင်းတွင် ကျောင်းသားဦးရေ ၅၀၀ ဝန်းကျင်နှင့် ညပိုင်းအတန်းချိန်များတွင် ၃၀၀ နီးပါးတက်ရောက်သင်ကြားလျှက်ရှိပါတယ်နော်...<br>
+            🧑‍🏫 ဆရာ၊ ဆရာမအင်အား ၆၀ ဝန်းကျင်ဖြင့် သင်ကြားပြသပေးနေပါတယ်ခင်ဗျာ...<br>
+            👉 ထပ်မံသိလိုသောအကြောင်းအရာများကို အောက်ဖော်ပြပါ Telegram, Facebook Page တို့မှတစ်ဆင့် ဆက်သွယ်စုံစမ်းနိုင်ပါတယ်ခင်ဗျာ......`,
+            telegram: "https://t.me/EduOffice2026",
+            facebook: "https://www.facebook.com/nwayoorevolutionaryhighschool",
+            website: "javascript:void(0);",
+            youtube: "",
+            tools: ['<i class="fas fa-video"></i> Zoom', '<i class="fas fa-users"></i> Google Form', '<i class="fas fa-poll"></i> Telegram']
+        },
+        {
+            name: "Singu Federal School",
+            established: "၂၀၂၅ ခုနှစ်",
+            students: "၁၇၀ ဝန်းကျင်",
+            teachers: "၄၅ ဦး",
+            time: "(8:00 AM - 1:00 PM)",
+            badgeContent: `✅ Singu Federal ဟာဆိုရင် NUG MOEမှ အသိမှတ်ပြုကျောင်းမဟုတ်သော်လည်း မန္တလေးဒေသရဲ့ ကြားကာလာအစိုးရဖြစ်တဲ့ Maldalay Federal Unit ရဲ့ ခွင်ပြုချက်နှင့် အသိမှတ်ပြုကျောင်းတစ်ကျောင်းဖြစ်ပါတယ်ခင်ဗျာ.... <br>
+            🏫 ကျောင်းရဲ့ရည်မှန်းချက်အနေနဲ့ ဖက်ဒရယ်ဒီမိုကရေစီပညာရေးစနစ်ထူထောင်ရန် ပညာသင်ခွင့်ဆုံးရှုံးနေသော ကျောင်းသားကျောင်းသူများအတွက် လွတ်လပ်စွာဖြင့် ကောင်းမွန်သော ပညာရေးတစ်ခု ဖန်တီးပေးရန်ဖြစ်ပါတယ်<br>
+            🧑‍🏫 Singu Federal ဟာဆိုရင် မြေပြင်နှင့်ချိတ်ဆက်သင်ကြားနေသော ကျောင်းတစ်ကျောင်းဖြစ်ပြီး မြေပြင်တွင် ၃ လကြာတက်ရောက်ရပြီး Online ဖြင့် ၆လတာရှိပြီး သင်ကြားချိန်စုစုပေါင်း ၉လတာ ရှိပါတယ်နော်...... <br>
+            ⌛ နယ်မြေအခြေနေအရ ၂၀၂၅ ခုနှစ်မှာဖွင့်မြေပြင်တွင် ဖွင့်လှစ်ခဲ့သော်လည်း လက်ရှိတွင် Online ဖြင့်ဆက်လက်သင်ကြားပေးနေပါတယ်နော်.....<br>
+            🎓 ကျောင်းသင်ရိုးအပြင် နည်းပညာကို လူငယ်များ အကျွမ်းတဝင်ရှိစေရန် နည်းပညာနှင့် ပတ်သတ်သော သင်တန်းများ သင်ကြားပေးလျက်ရှိပါတယ်ခင်ဗျာ....... <br>
+            🙆‍♀️ အရည်ချင်းစစ်စာမေးပွဲများ အနေဖြင့်လည်း Formative test (performance) and Summative test (Midterm and Year End) Performance (40%) and academic (60%) Performance assessment consists of 4 components _ attendance, project&homework, presentation, participation. Summative Assessment covers Monthly Tests, Midterm Test and Year End Test Assessment Gradings are published with 8 types (A+,A, B+,B,C+,C, D+ and D) စသည်ဖြင့် သတ်မှတ်ထားပါတယ်နော်... <br>
+            💸 ကျောင်းရဲ့ရပ်တည်နိုင်ရေးအတွက် ကျောင်းသားကျောင်းသူများ၏ တက်နိုင်သောပမာဏကိုသာလက်ခံပေးပါတယ်နော်.....<br>
+            📈 အသေးချက်အချက်လက်များကိုတော့ အောက်မှာချပေးထားတဲ့ နေရာတွေကနေ ဆက်သွယ်လေ့လာနိုင်ပါတယ်နော်....`,
+            telegram: "https://t.me/Singufs",
+            facebook: "https://www.facebook.com/share/1RnqJgwVWo/",
+            website: "javascript:void(0);",
+            youtube: "",
+            tools: ['<i class="fas fa-video"></i> Zoom', '<i class="fas fa-users"></i> GoogleSuite', '<i class="fas fa-poll"></i> Telegram']
+        }
+    ];
+
+    // ကျောင်းစာရင်းများကို HTML သို့ Loop ပတ်၍ ထည့်သွင်းခြင်း
+    function renderSchools() {
+        const schoolListContainer = document.getElementById('schoolList');
+        schoolListContainer.innerHTML = '';
+
+        schoolsData.forEach((school, index) => {
+            let youtubeLinkHtml = school.youtube ? `<a href="${school.youtube}" target="_blank" class="contact-link"><i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube</a>` : '';
+            let websiteLinkHtml = school.website !== "#" && school.website !== "javascript:void(0);" ? `<a href="${school.website}" target="_blank" class="contact-link"><i class="fas fa-globe" style="color: var(--website-gray);"></i> Website</a>` : `<a href="javascript:void(0);" class="contact-link"><i class="fas fa-globe" style="color: var(--website-gray);"></i> Website</a>`;
+
+            let toolsHtml = school.tools.map(tool => `<span class="tool-tag">${tool}</span>`).join('');
+
+            let cardHTML = `
+                <details class="school-card" data-name="${school.name}">
+                    <summary>
+                        <span><i class="fa-solid fa-school" style="margin-right: 10px;"></i> ${school.name}</span>
+                    </summary>
+                    <div class="school-section">
+                        <div class="info-note">
+                            <h3 class="note-heading">📋 ကျောင်း၏ အသေးစိတ်အချက်အလက်များကို အောက်တွင် လေ့လာနိုင်ပါသည်</h3>
+                            <div class="moe-badge">
+                                ${school.badgeContent}
+                            </div>
+                        </div>
+
+                        <div class="info-grid">
+                            <div class="info-box"><span class="label">📅 စတင်ဖွင့်လှစ်ခဲ့သောနှစ်</span><span class="value">${school.established}</span></div>
+                            <div class="info-box"><span class="label">🎓 လက်ရှိကျောင်းသားဦးရေ</span><span class="value">${school.students}</span></div>
+                            <div class="info-box"><span class="label">👨‍🏫 ဆရာအင်အား</span><span class="value">${school.teachers}</span></div>
+                            <div class="info-box"><span class="label">⏰ အတန်းချိန်များ</span><span class="value">${school.time}</span></div>
+                        </div>
+                        
+                        <div class="info-box" style="margin-top:15px;">
+                            <span class="label">🌐 ဆက်သွယ်ရန်</span>
+                            <div class="contact-links">
+                                <a href="${school.telegram}" target="_blank" class="contact-link"><i class="fab fa-telegram" style="color: var(--telegram-blue);"></i> Telegram</a>
+                                <a href="${school.facebook}" target="_blank" class="contact-link"><i class="fab fa-facebook" style="color: var(--facebook-blue);"></i> Facebook Page</a>
+                                ${websiteLinkHtml}
+                                ${youtubeLinkHtml}
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 15px;">
+                            <span class="label">🛠 Online Tools</span><br>
+                            ${toolsHtml}
+                        </div>
+                    </div>
+                </details>
+            `;
+            schoolListContainer.innerHTML += cardHTML;
+        });
+    }
+
+    // Cap Animation
+    function createCap() {
+        const cap = document.createElement('div');
+        cap.innerHTML = '🎓';
+        cap.className = 'cap';
+        cap.style.left = Math.random() * 100 + 'vw';
+        cap.style.animationDuration = (Math.random() * 3 + 5) + 's';
+        document.body.appendChild(cap);
+        setTimeout(() => cap.remove(), 8000);
+    }
+    setInterval(createCap, 5000);
+
+    // Initial render call
+    renderSchools();
+
+    // Search Filter & Suggestions Function
+    function filterSchools() {
+        let inputVal = document.getElementById('schoolSearch').value.toLowerCase().trim();
+        let suggestionsList = document.getElementById('suggestionsList');
+        suggestionsList.innerHTML = '';
+        let matchCount = 0;
+
+        const schoolCards = document.querySelectorAll('.school-card');
+
+        schoolCards.forEach(card => {
+            let name = card.getAttribute('data-name');
+            let nameLower = name.toLowerCase();
+
+            if (nameLower.includes(inputVal)) {
+                card.style.display = 'block';
+                
+                if (inputVal !== '') {
+                    let div = document.createElement('div');
+                    div.className = 'suggestion-item';
+                    div.innerHTML = `<i class="fa-solid fa-school" style="margin-right: 8px; color: var(--primary-blue);"></i> ${name}`;
+                    div.onclick = function() {
+                        document.getElementById('schoolSearch').value = name;
+                        suggestionsList.style.display = 'none';
+                        filterSchools();
+                    };
+                    suggestionsList.appendChild(div);
+                    matchCount++;
+                }
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        if (inputVal !== '' && matchCount > 0) {
+            suggestionsList.style.display = 'block';
+        } else {
+            suggestionsList.style.display = 'none';
+        }
+
+        if (inputVal === '') {
+            schoolCards.forEach(card => {
+                card.style.display = 'block';
+            });
+        }
+    }
+
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.search-container')) {
+            document.getElementById('suggestionsList').style.display = 'none';
+        }
+    });
+</script>
+
+<footer>
+    &copy; Federal Schools Promoting Project by <strong>Brainiacs</strong> <br>
+    <i class="fas fa-star" style="color: gold;"></i> <strong style="color: #ff5733; font-size: 18px;">United by knowledge, driven by empowered through code, building the future.</strong>
+</footer>
+</body>
+</html>
