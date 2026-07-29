@@ -6,19 +6,23 @@ function renderSchools() {
     schoolListContainer.innerHTML = "";
 
     schoolsData.forEach((school, index) => {
+
+        // condition ? expressionIfTrue : expressionIfFalse
         let youtubeLinkHtml = school.youtube
-            ? `<a href="${school.youtube}" target="_blank" class="contact-link"><i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube</a>`
+            ? <a href="${school.youtube}" target="_blank" rel="noopener noreferrer" class="contact-link"><i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube</a>
             : "";
 
         let websiteLinkHtml =
             school.website !== "#" && school.website !== "javascript:void(0);"
-                ? `<a href="${school.website}" target="_blank" class="contact-link"><i class="fas fa-globe" style="color: var(--website-gray);"></i> Website</a>`
-                : `<a href="javascript:void(0);" class="contact-link"><i class="fas fa-globe" style="color: var(--website-gray);"></i> Website</a>`;
+                ? <a href="${school.website}" target="_blank" rel="noopener noreferrer" class="contact-link"><i class="fas fa-globe" style="color: var(--website-gray);"></i> Website</a>
+                : <a href="javascript:void(0);" class="contact-link"><i class="fas fa-globe" style="color: var(--website-gray);"></i> Website</a>;
 
         let toolsHtml = school.tools
-            .map(tool => `<span class="tool-tag">${tool}</span>`)
+            .map(tool => <span class="tool-tag">${tool}</span>)
             .join("");
 
+
+        // HTML details summary = toggle on off by user event, always show header only
         let cardHTML = `
             <details class="school-card" data-name="${school.name}">
                 <summary>
@@ -27,7 +31,7 @@ function renderSchools() {
                         ${school.name}
                     </span>
                 </summary>
-
+                
                 <div class="school-section">
                     <div class="info-note">
                         <h3 class="note-heading">
@@ -90,7 +94,13 @@ function renderSchools() {
 
         schoolListContainer.innerHTML += cardHTML;
     });
+
+    document.querySelectorAll(".school-card").forEach((card, i) => {
+        card.style.animationDelay = `${i * 0.08}s`;
+    });
 }
+
+renderSchools();
 
 // Cap Animation
 function createCap() {
@@ -107,8 +117,7 @@ function createCap() {
 
 setInterval(createCap, 5000);
 
-// Initial render
-renderSchools();
+
 
 // Search Filter & Suggestions Function
 function filterSchools() {
@@ -116,6 +125,7 @@ function filterSchools() {
         .getElementById("schoolSearch")
         .value.toLowerCase()
         .trim();
+    console.log(inputVal);
 
     let suggestionsList = document.getElementById("suggestionsList");
     suggestionsList.innerHTML = "";
@@ -152,8 +162,7 @@ function filterSchools() {
         } else {
             card.style.display = "none";
         }
-    });
-
+    })
     if (inputVal !== "" && matchCount > 0) {
         suggestionsList.style.display = "block";
     } else {
@@ -166,6 +175,8 @@ function filterSchools() {
         });
     }
 }
+
+document.getElementById("schoolSearch").addEventListener("keyup", filterSchools);
 
 document.addEventListener("click", function (e) {
     if (!e.target.closest(".search-container")) {
