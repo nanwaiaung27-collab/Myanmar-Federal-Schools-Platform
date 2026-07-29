@@ -9,22 +9,22 @@ function renderSchools() {
 
         // condition ? expressionIfTrue : expressionIfFalse
         let youtubeLinkHtml = school.youtube
-            ? <a href="${school.youtube}" target="_blank" rel="noopener noreferrer" class="contact-link"><i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube</a>
+            ? `<a href="${school.youtube}" target="_blank" class="contact-link"><i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube</a>`
             : "";
 
         let websiteLinkHtml =
             school.website !== "#" && school.website !== "javascript:void(0);"
-                ? <a href="${school.website}" target="_blank" rel="noopener noreferrer" class="contact-link"><i class="fas fa-globe" style="color: var(--website-gray);"></i> Website</a>
-                : <a href="javascript:void(0);" class="contact-link"><i class="fas fa-globe" style="color: var(--website-gray);"></i> Website</a>;
+                ? `<a href="${school.website}" target="_blank" class="contact-link"><i class="fas fa-globe" style="color: var(--website-gray);"></i> Website</a>`
+                : `<a href="javascript:void(0);" class="contact-link"><i class="fas fa-globe" style="color: var(--website-gray);"></i> Website</a>`;
 
         let toolsHtml = school.tools
-            .map(tool => <span class="tool-tag">${tool}</span>)
+            .map(tool => `<span class="tool-tag">${tool}</span>`)
             .join("");
 
 
         // HTML details summary = toggle on off by user event, always show header only
         let cardHTML = `
-            <details class="school-card" data-name="${school.name}">
+            <details class="school-card reveal" data-name="${school.name}">
                 <summary>
                     <span>
                         <i class="fa-solid fa-school" style="margin-right: 10px;"></i>
@@ -94,13 +94,30 @@ function renderSchools() {
 
         schoolListContainer.innerHTML += cardHTML;
     });
-
-    document.querySelectorAll(".school-card").forEach((card, i) => {
-        card.style.animationDelay = `${i * 0.08}s`;
-    });
 }
 
 renderSchools();
+
+
+// Scroll-triggered reveal animation for ANY element with class "reveal", "reveal-left", or "reveal-right"
+// Re-triggers every time the element enters or leaves the viewport (both scroll directions)
+function initScrollReveal() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            entry.target.classList.toggle("visible", entry.isIntersecting);     // true false
+        });
+    }, {
+        threshold: 0.15,
+        rootMargin: "0px 0px -50px 0px"
+    });
+
+    document.querySelectorAll(".reveal, .reveal-left, .reveal-right").forEach(el => {
+        observer.observe(el);
+    });
+}
+
+initScrollReveal();
+
 
 // Cap Animation
 function createCap() {
@@ -118,29 +135,27 @@ function createCap() {
 setInterval(createCap, 5000);
 
 
-
 // Search Filter & Suggestions Function
 function filterSchools() {
-    let inputVal = document
-        .getElementById("schoolSearch")
-        .value.toLowerCase()
-        .trim();
+    const searchInput = document.getElementById("schoolSearch");
+    const inputVal = searchInput.value.toLowerCase().trim();
     console.log(inputVal);
 
-    let suggestionsList = document.getElementById("suggestionsList");
+    const suggestionsList = document.getElementById("suggestionsList");
     suggestionsList.innerHTML = "";
 
     let matchCount = 0;
-
     const schoolCards = document.querySelectorAll(".school-card");
 
+    // Looping all school cards
     schoolCards.forEach(card => {
-        let name = card.getAttribute("data-name");
+        let name = card.getAttribute("data-name") || "";
         let nameLower = name.toLowerCase();
 
-        if (nameLower.includes(inputVal)) {
-            card.style.display = "block";
+        if (inputVal === "" || nameLower.includes(inputVal)) {
+            card.style.display = "block";   // show matching card on screen
 
+            // Creating autosuggestion box
             if (inputVal !== "") {
                 let div = document.createElement("div");
 
@@ -150,34 +165,34 @@ function filterSchools() {
                     ${name}
                 `;
 
+                // Handle suggestion click
                 div.onclick = function () {
-                    document.getElementById("schoolSearch").value = name;
+                    searchInput.value = name;   // adding school name to inputVal result
                     suggestionsList.style.display = "none";
-                    filterSchools();
+                    filterSchools();    // Re-run filter for the selected school
                 };
 
                 suggestionsList.appendChild(div);
                 matchCount++;
             }
         } else {
-            card.style.display = "none";
+            card.style.display = "none";    // hide card on screen
         }
-    })
+    });
+
+    // Toggle suggestions dropdown visibility
     if (inputVal !== "" && matchCount > 0) {
         suggestionsList.style.display = "block";
     } else {
         suggestionsList.style.display = "none";
     }
 
-    if (inputVal === "") {
-        schoolCards.forEach(card => {
-            card.style.display = "block";
-        });
-    }
 }
 
+filterSchools();
 document.getElementById("schoolSearch").addEventListener("keyup", filterSchools);
 
+// close suggestion box after clicking outside the search-container
 document.addEventListener("click", function (e) {
     if (!e.target.closest(".search-container")) {
         document.getElementById("suggestionsList").style.display = "none";

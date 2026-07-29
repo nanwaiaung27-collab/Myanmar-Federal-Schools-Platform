@@ -23,6 +23,39 @@ body {
     background-repeat: no-repeat;
 }
 
+/* Generic scroll-reveal animation, used on all major sections */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Optional variants: slide in from left/right for variety */
+.reveal-left {
+    opacity: 0;
+    transform: translateX(-40px);
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+}
+.reveal-left.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.reveal-right {
+    opacity: 0;
+    transform: translateX(40px);
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+}
+.reveal-right.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
 .intro-card, details, .school-card {
     background: rgba(255, 255, 255, 0.45) !important;
     backdrop-filter: blur(12px);
@@ -68,6 +101,7 @@ header h1 {
     margin: 30px auto;
     max-width: 600px;
     padding: 0 20px;
+    z-index: 100;
 }
 
 #schoolSearch {
@@ -92,7 +126,7 @@ header h1 {
     border-radius: 10px;
     margin-top: 5px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    z-index: 99;
+    z-index: 1000;
     max-height: 200px;
     overflow-y: auto;
     display: none;
@@ -113,8 +147,7 @@ header h1 {
 
 /* School Card & Details Styling */
 .school-card {
-    margin-bottom: 25px;
-    overflow: hidden;
+    margin-bottom: 15px;
 }
 
 details {
