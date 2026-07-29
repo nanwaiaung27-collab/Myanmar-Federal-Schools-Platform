@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="my">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Federal Schools of Myanmar</title>
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+        <link rel="stylesheet" href="style.css" type="text/css">
+    </head>
+
+    <body>
+        <!-- Header Section -->
+        <header>
+            <h1>Myanmar Federal Schools Platform</h1>
+            <p>ပညာရေးဖြင့် အနာဂတ်ကို တည်ဆောက်စို့</p>
+        </header>
+
+        <!-- Main Content Section -->
+        <div class="container">
+
+            <!-- လေ့လာရန်လမ်းညွှန် Section -->
+            <div class="intro-card">
+                <h3 style="color: var(--primary-blue); margin-top: 0; margin-bottom: 15px;">
+                    🔎 လေ့လာရန်လမ်းညွှန်
+                </h3>
+
+                <p>
+                    မြန်မာနိုင်ငံကြားကာလအတွင်း NUG (MOE) လက်အောက်ရှိ Online Federal Schools
+                    များအား သိရှိလေ့လာနိုင်ရန်အောက်ပါအတိုင်း ဖော်ပြထားပါသည်။
+                </p>
+
+                <p>
+                    ⚠️ ကျွန်တော်တို့ဖန်တီးပေးထားသော Website သည် <strong>CDM</strong>
+                    ကျောင်းသားကျောင်းသူများ ပညာဆက်လက်သင်ကြားနိုင်ရန်
+                    ရည်ရွယ်ဖန်တီးထားခြင်းဖြစ်ပါသည်။
+                </p>
+
+                <p>
+                    🆘 ကျွန်တော်တို့ Website သို့ဝင်ရောက်လေ့လာသော
+                    ကျောင်းသားကျောင်းသူများနှင့် ကျောင်းသားမိဘများ အနေဖြင့်
+                    ဖော်ပြထားသော အချက်လက်များကို သေချာစွာဖတ်ရှုပေးပါရန်
+                    တိုက်တွန်းအပ်ပါသည်။
+                </p>
+            </div>
+
+            <!-- School Name ရှာရန် Section -->
+            <div class="search-container">
+                <label for="schoolSearch"></label><input
+                        type="text"
+                        id="schoolSearch"
+                        onkeyup="filterSchools()"
+                        placeholder="Search by school name 🔎..."
+                >
+
+                <div id="suggestionsList" class="suggestions-list"></div>
+            </div>
+
+            <!-- ကျောင်းစာရင်းများ loop ဖြင့် ဝင်ရောက်လာမည့်နေရာ from schoolsData.js -->
+            <div id="schoolList"></div>
+
+        </div>
+        <!-- End of Main Content Section -->
+
+        <!--Footer Section-->
+        <footer>
+            &copy; Federal Schools Promoting Project by <strong>Brainiacs</strong><br>
+
+            <i class="fas fa-star" style="color: gold;"></i>
+
+            <strong style="color: #ff5733; font-size: 18px;">
+                United by knowledge, driven by empowered through code, building the future.
+            </strong>
+        </footer>
+
+        <!--Connect to js file-->
+        <script type="module" src="app.js"></script>
+
+    </body>
+</html>
