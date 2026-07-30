@@ -23,7 +23,7 @@ body {
     background-repeat: no-repeat;
 }
 
-/* Generic scroll-reveal animation, used on all major sections */
+/* scroll-reveal animation */
 .reveal {
     opacity: 0;
     transform: translateY(30px);
@@ -275,9 +275,46 @@ details[open] summary::after {
 }
 @keyframes fall { to { transform: translateY(110vh); } }
 
+#noResultsMsg {
+    text-align: center;
+    color: var(--primary-blue);
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-top: 30px;
+    padding: 25px;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/*Footer Section*/
 footer {
     text-align: center;
     padding: 40px;
     color: white;
     font-size: 0.9rem;
+}
+
+.brand-name {
+    background: linear-gradient(90deg,
+    var(--accent-gold),
+    #ff5733,
+    var(--accent-gold)
+    );
+    background-size: 300% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700;
+    font-size: 1.15rem;
+    letter-spacing: 0.5px;
+    animation: gradientFlow 4s linear infinite;
+}
+
+@keyframes gradientFlow {
+    0% { background-position: 0% center; }
+    100% { background-position: 300% center; }
 }

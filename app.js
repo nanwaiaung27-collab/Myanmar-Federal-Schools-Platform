@@ -98,9 +98,6 @@ function renderSchools() {
 
 renderSchools();
 
-
-// Scroll-triggered reveal animation for ANY element with class "reveal", "reveal-left", or "reveal-right"
-// Re-triggers every time the element enters or leaves the viewport (both scroll directions)
 function initScrollReveal() {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -185,6 +182,22 @@ function filterSchools() {
         suggestionsList.style.display = "block";
     } else {
         suggestionsList.style.display = "none";
+    }
+
+    // --- No results message ---
+    const visibleCards = document.querySelectorAll(".school-card[style*='display: block']");
+    const schoolListContainer = document.getElementById("schoolList");
+    let noResultsMsg = document.getElementById("noResultsMsg");
+
+    if (inputVal !== "" && visibleCards.length === 0) {
+        if (!noResultsMsg) {
+            noResultsMsg = document.createElement("p");
+            noResultsMsg.id = "noResultsMsg";
+            noResultsMsg.textContent = "ရှာဖွေမှုနှင့် ကိုက်ညီသော ကျောင်းများ မတွေ့ရှိပါ၊ ကျေးဇူးပြု၍ ပြန်လည်ကြိုးစားပေးပါ။";
+            schoolListContainer.parentElement.appendChild(noResultsMsg);
+        }
+    } else if (noResultsMsg) {
+        noResultsMsg.remove();
     }
 
 }
