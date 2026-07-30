@@ -3,18 +3,18 @@ import schoolsData from "./schoolsData.js";
 // ကျောင်းစာရင်းများကို HTML သို့ Loop ပတ်၍ ထည့်သွင်းခြင်း
 function renderSchools() {
     const schoolListContainer = document.getElementById("schoolList");
-    schoolListContainer.innerHTML = "";
+    schoolListContainer.textContent = "";
 
     schoolsData.forEach((school, index) => {
 
         // condition ? expressionIfTrue : expressionIfFalse
         let youtubeLinkHtml = school.youtube
-            ? `<a href="${school.youtube}" target="_blank" class="contact-link"><i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube</a>`
+            ? `<a href="${school.youtube}" target="_blank" rel="noopener noreferrer" class="contact-link"><i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube</a>`
             : "";
 
         let websiteLinkHtml =
             school.website !== "#" && school.website !== "javascript:void(0);"
-                ? `<a href="${school.website}" target="_blank" class="contact-link"><i class="fas fa-globe" style="color: var(--website-gray);"></i> Website</a>`
+                ? `<a href="${school.website}" target="_blank" rel="noopener noreferrer" class="contact-link"><i class="fas fa-globe" style="color: var(--website-gray);"></i> Website</a>`
                 : `<a href="javascript:void(0);" class="contact-link"><i class="fas fa-globe" style="color: var(--website-gray);"></i> Website</a>`;
 
         let toolsHtml = school.tools
@@ -69,12 +69,12 @@ function renderSchools() {
                         <span class="label">🌐 ဆက်သွယ်ရန်</span>
 
                         <div class="contact-links">
-                            <a href="${school.telegram}" target="_blank" class="contact-link">
+                            <a href="${school.telegram}" target="_blank" rel="noopener noreferrer" class="contact-link">
                                 <i class="fab fa-telegram" style="color: var(--telegram-blue);"></i>
                                 Telegram
                             </a>
 
-                            <a href="${school.facebook}" target="_blank" class="contact-link">
+                            <a href="${school.facebook}" target="_blank" rel="noopener noreferrer" class="contact-link">
                                 <i class="fab fa-facebook" style="color: var(--facebook-blue);"></i>
                                 Facebook Page
                             </a>
