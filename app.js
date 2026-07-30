@@ -5,7 +5,7 @@ function renderSchools() {
     const schoolListContainer = document.getElementById("schoolList");
     schoolListContainer.textContent = "";
 
-    schoolsData.forEach((school, index) => {
+    schoolsData.forEach((school) => {
 
         // condition ? expressionIfTrue : expressionIfFalse
         let youtubeLinkHtml = school.youtube
@@ -98,7 +98,7 @@ function renderSchools() {
 
 renderSchools();
 
-// Scrolling — reveal once, then stop watching (prevents cards vanishing on click/expand)
+// Scrolling Section
 function initScrollReveal() {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -118,7 +118,6 @@ function initScrollReveal() {
 }
 
 initScrollReveal();
-
 
 // Cap Animation
 function createCap() {
@@ -188,7 +187,7 @@ function filterSchools() {
         suggestionsList.style.display = "none";
     }
 
-    // --- No results message ---
+    // No result message
     const visibleCards = document.querySelectorAll(".school-card[style*='display: block']");
     const schoolListContainer = document.getElementById("schoolList");
     let noResultsMsg = document.getElementById("noResultsMsg");
@@ -203,7 +202,6 @@ function filterSchools() {
     } else if (noResultsMsg) {
         noResultsMsg.remove();
     }
-
 }
 
 filterSchools();
