@@ -167,13 +167,14 @@ function filterSchools() {
 
                 // Handle suggestion click
                 div.onclick = function () {
-                    searchInput.value = name;   // adding school name to inputVal result
+                    searchInput.value = name;   // assign school name to searchInput value
                     suggestionsList.style.display = "none";
-                    filterSchools();    // Re-run filter for the selected school
+                    filterSchools();    // Re-run filter function to show for the selected school
                 };
 
                 suggestionsList.appendChild(div);
                 matchCount++;
+                // console.log(matchCount);
             }
         } else {
             card.style.display = "none";    // hide card on screen
@@ -190,8 +191,9 @@ function filterSchools() {
     // No result message
     const visibleCards = document.querySelectorAll(".school-card[style*='display: block']");
     const schoolListContainer = document.getElementById("schoolList");
-    let noResultsMsg = document.getElementById("noResultsMsg");
+    let noResultsMsg = document.getElementById("noResultsMsg");     // null
 
+    // card length is zero(true) cuz user writes wrong school, so d:none is activated
     if (inputVal !== "" && visibleCards.length === 0) {
         if (!noResultsMsg) {
             noResultsMsg = document.createElement("p");
